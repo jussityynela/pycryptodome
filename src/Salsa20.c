@@ -25,6 +25,7 @@
  * =======================================================================
  */
 
+#include <inttypes.h>
 #include "common.h"
 #include "endianess.h"
 
@@ -139,13 +140,34 @@ static void _salsa20_block(unsigned rounds, uint32_t *input, uint8_t *output)
     STORE_U32_LITTLE (output + 52, x13);
     STORE_U32_LITTLE (output + 56, x14);
     STORE_U32_LITTLE (output + 60, x15);
-    
+
     /* Increment block counter */
     input[8] = input[8] + 1;
     if (!input[8]) {
         input[9] = input[9] + 1;
         /* stopping at 2^70 bytes per nonce is user's responsibility */
     }
+    printf("\n\ninternal state\n\n\t");
+    printf("%08" PRIx32 " ", x0);
+    printf("%08" PRIx32 " ", x1);
+    printf("%08" PRIx32 " ", x2);
+    printf("%08" PRIx32 " ", x3);
+    printf("\n\t");
+    printf("%08" PRIx32 " ", x4);
+    printf("%08" PRIx32 " ", x5);
+    printf("%08" PRIx32 " ", x6);
+    printf("%08" PRIx32 " ", x7);
+    printf("\n\t");
+    printf("%08" PRIx32 " ", x8);
+    printf("%08" PRIx32 " ", x9);
+    printf("%08" PRIx32 " ", x10);
+    printf("%08" PRIx32 " ", x11);
+    printf("\n\t");
+    printf("%08" PRIx32 " ", x12);
+    printf("%08" PRIx32 " ", x13);
+    printf("%08" PRIx32 " ", x14);
+    printf("%08" PRIx32 " ", x15);
+    printf("\n");
 }
 
 /*
@@ -172,6 +194,8 @@ EXPORT_SYM int Salsa20_8_core(const uint8_t *x, const uint8_t *y, uint8_t *out)
     }
 
     _salsa20_block(8, input_32, out);
+
+
     return 0;
 }
 
@@ -191,6 +215,14 @@ EXPORT_SYM int Salsa20_stream_init(uint8_t *key, size_t keylen,
         return ERR_KEY_SIZE;
     constants = keylen == 32 ? sigma : tau;
 
+    printf("\nKey here \t");
+    for(int i = 0; i < keylen; i++) {
+        if ( i % 4 == 0)
+        {
+           printf("\n\t"); 
+        }
+        printf("%0" PRIx8 " ", key[i]);
+    }
     if (nonce_len != 8)
         return ERR_NONCE_SIZE;
     
@@ -220,6 +252,17 @@ EXPORT_SYM int Salsa20_stream_init(uint8_t *key, size_t keylen,
     input[15] = LOAD_U32_LITTLE(constants + 12);
 
     salsaState->blockindex = 64;
+
+
+    printf("\nInputState \t");
+    for(int i = 0; i < 16; i++) {
+        if ( i % 4 == 0)
+        {
+           printf("\n\t"); 
+        }
+        printf("%08" PRIx32 " ", salsaState->input[i]);
+    }
+    
     return 0;
 }
 

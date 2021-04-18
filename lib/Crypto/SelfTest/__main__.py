@@ -33,6 +33,6 @@ if not slow_tests:
 wycheproof_warnings = "--wycheproof-warnings" in sys.argv
 if wycheproof_warnings:
     print("Printing Wycheproof warnings")
-
+print("Testing JTY branch")
 config = {'slow_tests' : slow_tests, 'wycheproof_warnings' : wycheproof_warnings }
 SelfTest.run(stream=sys.stdout, verbosity=1, config=config)
