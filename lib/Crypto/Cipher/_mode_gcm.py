@@ -203,7 +203,7 @@ class GcmMode(object):
         self._tag = None  # Cache for MAC tag
 
         self._mac_len = mac_len
-        if not (4 <= mac_len <= 16):
+        if not (2 <= mac_len <= 16):
             raise ValueError("Parameter 'mac_len' must be in the range 4..16")
 
         # Allowed transitions after initialization
